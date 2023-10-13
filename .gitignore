@@ -1,0 +1,7 @@
+Archivos/
+*.exe
+*.o
+*.s
+.idea/
+*.txt
+cmake-build-debug

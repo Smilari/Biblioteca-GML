@@ -7,13 +7,25 @@
 #include <windows.h>
 #include <conio.h>
 #include <time.h>
-#include <direct.h>
+#include <limits.h>
+#include "Constantes.h"
 #define CLEAN() system("cls")
 #define PAUSE() system("pause")
 
+// Structs
+typedef struct {
+	int x;
+	int y;
+} Coordenada;
 typedef char string[50];
 
 enum Colors {BLACK=0,BLUE=1,GREEN=2,CYAN=3,RED=4,MAGENTA=5,BROWN=6,LGREY=7,DGREY=8,LBLUE=9,LGREEN=10,LCYAN=11,LRED=12,LMAGENTA=13,YELLOW=14,WHITE=15};
+
+enum CURSORTYPE{
+	_NOCURSOR,//     turns off the cursor
+	_SOLIDCURSOR,//  solid block cursor
+	_NORMALCURSOR // normal underscore cursor
+};
 
 // Lectura de datos
 int leerEntero(string mensaje);
@@ -39,13 +51,26 @@ int generarNumAleatorio(int valorMin, int valorMax);
 int sonIguales(string texto, string texto2);
 void swap(int *a, int *b);
 bool confirmaUsuario(string mensaje);
-void retardo(float seg);
-void linea(int x);
+void insertarEnter(int x);
 int error(string path);
 void tecla(void);
+
+// Visual / Estetico
+void lineaVertical(int largo);
+void lineaVerticalEn(Coordenada xy, int largo);
+void lineaHorizontal(int largo, int cod);
+void lineaHorizontalEn(Coordenada xy, int largo, int cod);
+void retardo(float seg);
 void cargar();
-void gotoxy(int x,int y);
 void color(int Background, int Texto);
+void recuadroSimple(int alto, int ancho);
+void _setcursortype(int cur_t);
+
+// Posicion
+void gotoxy(int x,int y);
+int wherex(void);
+int wherey(void);
+Coordenada getCoordenada();
 
 // Ordenamiento
 void bubbleSortAsc (int numeros[], int cant);
@@ -70,5 +95,5 @@ int existeArchivo(FILE* pArch);
 void agregarTXT(string archiveName);
 FILE* abrirArchivoBinario(string path, string tipo);
 
-#include "../Sources/utils.c"
+#include "../utils.c"
 #endif // UTILS_H_INCLUDED

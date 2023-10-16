@@ -5,6 +5,7 @@
 #include "Menus.h"
 #include "Textos.h"
 
+
 typedef char stringPath[MAX_PATH]; // String con tope maximo para rutas de archivos
 typedef struct{
     stringPath ruta;

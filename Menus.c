@@ -1,5 +1,6 @@
 #include "Headers/Menus.h"
 
+/**/
 void menuPrincipal() {
 	OpcionesMenu om[] = {"        MENU PRINCIPAL", "SOCIO", "LIBRO", "PRESTAMO", "FINALIZAR PROGRAMA"};
 	int opcionSeleccionada;

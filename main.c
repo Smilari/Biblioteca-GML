@@ -2,15 +2,22 @@
 /** @brief Proyecto de Estructura y Base de Datos.                       **/
 /** @version Pre-Alpha                                                   **/
 /**************************************************************************/
+// FALTA DOCUMENTAR Y ELIMINAR CONSTANTES.H
 
 /** CABECERAS EXTERNAS DE FUNCIONES **/
-
 #include "Headers/utils.h"
 #include "Headers/Archivos.h"
 #include "Headers/Menus.h"
-#include "Headers/Constantes.h"
 
 /* DEFINICIONES */
+#define PATH_SOCIO "Socio.dat"
+#define PATH_LIBRO "Libro.dat"
+#define PATH_PRESTAMO "Prestamo.dat"
+#define PATH_EDITORIAL "Editorial.dat"
+#define PATH_AUTOR "Autor.dat"
+#define PATH_GENERO "Genero.dat"
+
+
 
 
 typedef struct {

@@ -1,3 +1,5 @@
+#include "Headers/utils.h"
+
 int leerEntero(string mensaje) {
 /* Muestra el mensaje al usuario, lee un int y lo retorna */
 

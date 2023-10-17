@@ -6,9 +6,8 @@ void verificaArchivos(Archivo ar[], int cantArchivos) {
     strcat(path, crearPath());
     asignarPath(path, ar, cantArchivos);
 	CLEAN();
-	t_verificandoArchivos();
+	header("VERIFICANDO EXISTENCIA DE ARCHIVOS", "");
 
-	gotoxy(0, 5);
     for(int i = 0; i < cantArchivos; i++){
         pArch = fopen(ar[i].ruta,"rb");
         if (pArch == NULL){

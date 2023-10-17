@@ -2,8 +2,7 @@
 #define ARCHIVOS_H_
 
 #include "utils.h"
-#include "Menus.h"
-#include "Textos.h"
+#include "Interfaz.h"
 
 
 typedef char stringPath[MAX_PATH]; // String con tope maximo para rutas de archivos

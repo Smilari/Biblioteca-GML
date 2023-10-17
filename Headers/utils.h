@@ -8,9 +8,29 @@
 #include <conio.h>
 #include <time.h>
 #include <limits.h>
-#include "Constantes.h"
 #define CLEAN() system("cls")
 #define PAUSE() system("pause")
+
+// LINEAS SIMPLES
+/*
+#define LINEA_MEDIO 196 // ─
+#define LINEA_VERTICAL "179" // │
+#define INFERIOR_IZQ 192 // └
+#define INFERIOR_DER 217 // ┘
+#define SUPERIOR_IZQ 218 // ┌
+#define SUPERIOR_DER 191 // ┐
+#define MEDIO_IZQ 195 // ├
+#define MEDIO_DER 180 // ┤
+ */
+// LINEAS DOBLES
+#define LINEA_MEDIO 205 // ═
+#define INFERIOR_IZQ 200 // ╚
+#define INFERIOR_DER 188 // ╝
+#define LINEA_VERTICAL 186 // ║
+#define SUPERIOR_IZQ 201// ╔
+#define SUPERIOR_DER 187 // ╗
+#define MEDIO_IZQ 204 // ╠
+#define MEDIO_DER 185 // ╣
 
 // Structs
 typedef struct {

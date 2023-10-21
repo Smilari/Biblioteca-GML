@@ -519,3 +519,4 @@ void _setcursortype(int cur_t) {
 			break;
 	}
 }
+

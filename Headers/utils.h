@@ -8,6 +8,7 @@
 #include <conio.h>
 #include <time.h>
 #include <limits.h>
+
 #define CLEAN() system("cls")
 #define PAUSE() system("pause")
 
@@ -115,5 +116,8 @@ int existeArchivo(FILE* pArch);
 void agregarTXT(string archiveName);
 FILE* abrirArchivoBinario(string path, string tipo);
 
+#include "Interfaz.h"
+#include "Archivos.h"
+#include "Libros.h"
 #include "../utils.c"
 #endif // UTILS_H_INCLUDED

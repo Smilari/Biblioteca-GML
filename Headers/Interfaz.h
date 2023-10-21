@@ -11,6 +11,7 @@
 #define RIGHT_ARROW 77
 #define ESC 27
 #define ENTER 13
+#define BACKSPACE 8
 #define POS_MENU_X ((ANCHO_PANTALLA - ANCHO_MENU)/2)
 #define POS_MENU_Y 5
 
@@ -31,9 +32,10 @@ void menuSocios();
 void menuLibros();
 void menuPrestamos();
 
+long long int capturaCaracter(int cantCaracteres, int flagTopeCaracteres);
 void header(string titulo, string etiqueta);
 int posCentrado(string str);
-
+void clean();
 
 #include "../Interfaz.c"
 #endif //INTERFAZ_H

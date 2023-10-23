@@ -16,13 +16,13 @@ void verificaArchivos() {
 		if (pArch == NULL){
 			pArch = fopen(ar[i].ruta,"wb"); // Si el archivo no existe, lo crea en modo escritura binaria.
 			fclose(pArch);
-			printf("\n=>%-120s ", ar[i].ruta);
+			printf("\n=>%-65s ", ar[i].ruta);
 			color(RED,BLACK);
 			printf(" CREADO ");
 			color(BLACK,WHITE);
 		}
 		else{
-			printf("\n=>%-120s ", ar[i].ruta);
+			printf("\n=>%-65s ", ar[i].ruta);
 			color(GREEN,BLACK);
 			printf(" OK ");
 			color(BLACK,WHITE);

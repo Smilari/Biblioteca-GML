@@ -24,6 +24,8 @@ typedef struct {
 int menu(OpcionesMenu om[], Coordenada xy, int cantOpciones);
 void printMenu(OpcionesMenu om[], Coordenada xy, int selector, int cantOpciones);
 void printOpcion(string opc);
+int subMenu(OpcionesMenu om[], Coordenada xy, int cantOpciones);
+void printSubMenu(OpcionesMenu om[], Coordenada xy, int selector, int cantOpciones);
 void insertCaracteres(int cant, char caracter);
 int getKey();
 
@@ -32,9 +34,9 @@ void menuSocios();
 void menuLibros();
 void menuPrestamos();
 
-long long int capturaCaracter(int cantCaracteres, int flagTopeCaracteres);
+long long int capturaCaracter(int cantCaracteres, boolean flagTopeCaracteres);
 void header(string titulo, string etiqueta);
-int posCentrado(string str);
+int posCentrado(int ancho);
 void clean();
 
 #include "../Interfaz.c"

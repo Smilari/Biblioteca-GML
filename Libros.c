@@ -3,31 +3,44 @@
 void altaLibro(){
 	header("ALTA DE REGISTRO", "LIBROS");
 	cargarDatos();
-	Libro libros[5];
-	getLibros(libros);
-	//listAllLibros();
+	listAllLibros();
+
 	tecla();
 }
 
+void bajaLibro(){
+
+}
+
 void cargarDatos() {
-	FILE* fLibro = fopen(PATH_LIBRO, "r+b");
+	FILE* fLibro;
 	Libro l;
 
-	fseek(fLibro,0,SEEK_END);
-	l.ID_libro = (ftell(fLibro) / sizeof(Libro)) + 1; // Calcula el ID del próximo libro a agregar al archivo basándose en la última posición del puntero de archivo.
-	fseek(fLibro,0,SEEK_SET);
+	l.ID_libro = getCantLibros();
 	l.ID_autor = 10; // Cambiar.
 	l.ID_genero = 15; // Cambiar.
 	l.ID_editorial = 20; // Cambiar.
-	printf("ISBN: ");
-	l.ISBN = capturaCaracter(13, 1);
-	leerString("\nTitulo: ", l.titulo);
 	l.stock = 1; // Cambiar.
+
+	printf("ISBN: ");
+	l.ISBN = capturaCaracter(13, true);
+	leerString("\nTitulo: ", l.titulo);
+
+	fLibro = fopen(PATH_LIBRO, "r+b");
+	fseek(fLibro,0L,SEEK_END);
 	fwrite(&l, sizeof(l), 1, fLibro);
 	fclose(fLibro);
 }
 
-int getLibros(Libro libros[]){
+int getCantLibros(){
+	FILE* fLibro = fopen(PATH_LIBRO, "rb");
+	fseek(fLibro,0L,SEEK_END);
+	int cantLibros = (ftell(fLibro) / sizeof(Libro)) + 1;
+	fclose(fLibro);
+	return cantLibros; // Determina la posición del último libro agregado basándose en la última posición del puntero de archivo.
+}
+
+void getLibros(Libro libros[]){
 	FILE* fLibro = fopen(PATH_LIBRO, "rb");
 	Libro l;
 	int i = 0;
@@ -38,9 +51,7 @@ int getLibros(Libro libros[]){
 		fread(&l, sizeof(l), 1, fLibro);
 		i++;
 	}
-	mostrarLibro(libros[0]);
 	fclose(fLibro);
-	return i;
 }
 
 void listLibros(Libro libros[], int cantLibros){
@@ -51,8 +62,9 @@ void listLibros(Libro libros[], int cantLibros){
 }
 
 void listAllLibros() {
-	Libro libros[] = {};
-	int cantLibros = getLibros(libros);
+	int cantLibros = getCantLibros() - 1;
+	Libro libros[cantLibros];
+	getLibros(libros);
 
 	printf("\nId Libro\tId Autor\tId Genero\tId Editorial\tISBN\tTitulo\tStock\n\n");
 	for (int i = 0; i < cantLibros; i++) {

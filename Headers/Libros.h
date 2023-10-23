@@ -13,11 +13,13 @@ typedef struct {
 } Libro;
 
 void altaLibro();
-void mostrarLibro(Libro l);
+void cargarDatos();
+
+void getLibros(Libro libros[]);
+int getCantLibros();
 void listLibros(Libro libros[], int cantLibros);
 void listAllLibros();
-int getLibros(Libro libros[]);
-void cargarDatos();
+void mostrarLibro(Libro l);
 
 #include "../Libros.c"
 #endif /*LIBROS_H_*/

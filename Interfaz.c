@@ -1,5 +1,9 @@
 #include "Headers/Interfaz.h"
 
+int selectOpcion(int cantOpciones);
+
+void printSubMenu(OpcionesMenu *om, Coordenada xy, int selector, int cantOpciones);
+
 /** @def Esta función imprime un encabezado en pantalla (en una posición fija) con un título y una etiqueta.
 	@param título Cadena de caracteres que representa el título del encabezado.
 	@param etiqueta Cadena de caracteres que representa la etiqueta del encabezado. */
@@ -13,18 +17,18 @@ void header(string titulo, string etiqueta) {
 		gotoxy(0, i);
 		insertCaracteres(ANCHO_PANTALLA, ' '); // Imprime caracteres vacíos para cambiar en esa zona al color seleccionado.
 	}
-	gotoxy(posCentrado(titulo), 2); // Posiciona el título centrado en la parte superior del encabezado.
+	gotoxy(posCentrado(strlen(titulo)), 2); // Posiciona el título centrado en la parte superior del encabezado.
 	printf("%s", titulo);
 	color(BLACK, WHITE);
 	gotoxy(0, 5); // Posiciona el cursor debajo del encabezado.
 }
 
 /** @def Esta función calcula la posición horizontal centrada para imprimir una cadena en pantalla.
-	@param str Cadena de caracteres cuya longitud se utilizará para calcular la posición centrada.
-	@return La posición horizontal centrada para imprimir la cadena en pantalla. */
+	@param ancho Cantidad de caracteres que ocupa el ancho de pantalla, para calcular la posición centrada.
+	@return La posición horizontal centrada (x) para imprimir la cadena en pantalla. */
 
-int posCentrado(string str) {
-	return (ANCHO_PANTALLA - strlen(str)) / 2;
+int posCentrado(int ancho) {
+	return (ANCHO_PANTALLA - ancho) / 2;
 }
 
 void menuPrincipal() {
@@ -85,6 +89,7 @@ void menuLibros() {
 				altaLibro();
 				break;
 			case 2:
+				bajaLibro();
 				break;
 			case 3:
 				break;
@@ -138,19 +143,18 @@ int menu(OpcionesMenu om[], Coordenada xy, int cantOpciones) {
 				if (opcion >= cantOpciones) {
 					opcion = 1;
 				}
-				printMenu(om, xy, opcion, cantOpciones);
 				break;
 			case UP_ARROW:
 			case LEFT_ARROW:
 				opcion--;
-				if (opcion <= 0) {
+				if (opcion < 1) {
 					opcion = cantOpciones - 1;
 				}
-				printMenu(om, xy, opcion, cantOpciones);
 				break;
 			case ESC:
 				opcion = cantOpciones - 1;
 		}
+		printMenu(om, xy, opcion, cantOpciones);
 	} while (key != ENTER && key != ESC);
 	return opcion;
 }
@@ -182,6 +186,59 @@ void printMenu(OpcionesMenu om[], Coordenada xy, int selector, int cantOpciones)
 void printOpcion(string opc) {
 	printf("%s", opc);
 	insertCaracteres(ANCHO_MENU - strlen(opc), ' ');
+}
+
+int subMenu(OpcionesMenu om[], Coordenada xy, int cantOpciones) {
+	int opcion = 0;
+	int key;
+	int ancho = 0;
+	_setcursortype(_NOCURSOR); // Oculta el cursor.
+	for(int i = 0; i < cantOpciones; i++){
+		ancho += strlen(om[i].opcion) + 2;
+	}
+	xy.x = posCentrado(ancho);
+	printSubMenu(om, xy, opcion, cantOpciones);
+
+	do {
+		key = getKey();
+		switch (key) {
+			case DOWN_ARROW:
+			case RIGHT_ARROW:
+				opcion++;
+				if (opcion >= cantOpciones) {
+					opcion = 0;
+				}
+				break;
+			case UP_ARROW:
+			case LEFT_ARROW:
+				opcion--;
+				if (opcion < 0) {
+					opcion = cantOpciones - 1;
+				}
+				break;
+			case ESC:
+				opcion = cantOpciones - 1;
+		}
+		printSubMenu(om, xy, opcion, cantOpciones);
+	} while (key != ENTER && key != ESC);
+	return opcion;
+}
+
+void printSubMenu(OpcionesMenu om[], Coordenada xy, int selector, int cantOpciones) {
+	gotoxy(0, xy.y);
+	color(BLUE, YELLOW);
+	insertCaracteres(ANCHO_PANTALLA, ' ');
+	for (int i = 0; i < cantOpciones; i++) {
+		if (i == selector) {
+			color(WHITE, BLUE);
+
+		} else {
+			color(BLUE, WHITE);
+		}
+		gotoxy(xy.x, xy.y);
+		printf("%s", om[i].opcion);
+		xy.x += strlen(om[i].opcion) + 2;
+	}
 }
 
 /** @def Esta función imprime una secuencia de caracteres repetidos en pantalla.
@@ -221,11 +278,11 @@ void clean(){
 	      después de presionar ENTER.
 	@return El número entero capturado desde el teclado. */
 
-long long int capturaCaracter(int cantCaracteres, int flagTopeCaracteres) {
+long long int capturaCaracter(int cantCaracteres, boolean flagTopeCaracteres) {
 	char key;
 	long long valorNumerico = 0;
 	int digito = 0;
-	int flagDelete = 0;
+	boolean flagDelete = false;
 	Coordenada xy = getCoordenada();
 
 	do{
@@ -234,14 +291,14 @@ long long int capturaCaracter(int cantCaracteres, int flagTopeCaracteres) {
 			digito = key - '0';
 			valorNumerico = (valorNumerico * 10) + digito;
 			cantCaracteres--;
-			flagDelete = 1;
+			flagDelete = true;
 		}
 		if(key == BACKSPACE && flagDelete){
 			valorNumerico = (valorNumerico - digito) / 10;
 			gotoxy(xy.x, xy.y);
 			insertCaracteres(13, ' ');
 			cantCaracteres++;
-			flagDelete = 0;
+			flagDelete = false;
 		}
 		gotoxy(xy.x, xy.y);
 		printf("%lld", valorNumerico);

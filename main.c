@@ -2,29 +2,11 @@
 /** @brief Proyecto de Estructura y Base de Datos.                       **/
 /** @version Pre-Alpha                                                   **/
 /**************************************************************************/
-// FALTA DOCUMENTAR
 
 /** CABECERAS EXTERNAS DE FUNCIONES **/
 #include "Headers/utils.h"
 
 /* DEFINICIONES */
-
-
-typedef struct {
-	int ID_editorial;
-	string nombre;
-} Editorial;
-
-typedef struct {
-	int ID_genero;
-	string tipo;
-} Genero;
-
-typedef struct {
-	int ID_autor;
-	string nombre;
-	string apellido;
-} Autor;
 
 typedef struct {
 	int ID_socio;

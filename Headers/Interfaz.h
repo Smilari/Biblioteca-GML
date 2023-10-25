@@ -17,27 +17,36 @@
 
 #define SIZEOFARRAY(arr) sizeof(arr) / sizeof(*arr)
 
-typedef struct {
+typedef struct{
 	string opcion;
 } OpcionesMenu;
 
+// INTERFAZ DE MENUS
 int menu(OpcionesMenu om[], Coordenada xy, int cantOpciones);
 void printMenu(OpcionesMenu om[], Coordenada xy, int selector, int cantOpciones);
 void printOpcion(string opc);
 int subMenu(OpcionesMenu om[], Coordenada xy, int cantOpciones);
 void printSubMenu(OpcionesMenu om[], Coordenada xy, int selector, int cantOpciones);
-void insertCaracteres(int cant, char caracter);
-int getKey();
 
+// MENUS CON OPCIONES DE USUARIO
 void menuPrincipal();
 void menuSocios();
 void menuLibros();
 void menuPrestamos();
 
+// FUNCIONES DE UTILIDAD
+void insertarCaracteres(int cant, char caracter);
+int getKey();
 long long int capturaCaracter(int cantCaracteres, boolean flagTopeCaracteres);
 void header(string titulo, string etiqueta);
 int posCentrado(int ancho);
 void clean();
+boolean guardarCambios();
+void guardar();
+void cancelar();
+void insertarLineas(int cantLineas);
+void aviso(string texto, int bgd, int txt);
+void lineaDeColor(int bgd, int txt);
 
 #include "../Interfaz.c"
 #endif //INTERFAZ_H

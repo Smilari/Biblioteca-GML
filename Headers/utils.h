@@ -69,7 +69,7 @@ void mostrarVectorDeCaracteres(char vec[], int cant);
 
 // Utilidad
 int generarNumAleatorio(int valorMin, int valorMax);
-int sonIguales(string texto, string texto2);
+boolean sonIguales(string texto, string texto2, boolean mayus);
 void swap(int *a, int *b);
 bool confirmaUsuario(string mensaje);
 void insertarEnter(int x);

@@ -171,8 +171,14 @@ int generarNumAleatorio(int valorMin, int valorMax) {
 	return (valorMin + (rand() % (valorMax - valorMin + 1)));
 }
 
-int sonIguales(string texto, string texto2) {
-	return strcmp(texto, texto2) == 0;
+boolean sonIguales(string texto, string texto2, boolean mayus) {
+	boolean resultado;
+	if(mayus){
+		resultado = strcasecmp(texto, texto2) == 0;
+	}else{
+		resultado = strcmp(texto, texto2) == 0;
+	}
+	return resultado;
 }
 
 void swap(int *a, int *b) {

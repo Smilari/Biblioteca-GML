@@ -9,7 +9,7 @@ void altaLibro(){
 void bajaLibro(){
 	header("BAJA DE REGISTRO", "LIBROS");
 	printf("ISBN: ");
-	long long ISBN = capturaCaracter(13, false);
+	size_t ISBN = capturaCaracter(13, false);
 	insertarLineas(2);
 	if(existeLibro(ISBN)){
 		borrarLibro(ISBN);
@@ -27,10 +27,10 @@ void modificarLibro(){
 
 void listAllLibros() {
 	header("LISTAR REGISTROS ", "LIBROS");
-	int cantLibros = getCantLibros() - 1;
+	int cantLibros = getCantDatos(PATH_LIBRO, sizeof(Libro));
 	Libro libros[cantLibros];
 
-	getDatos(libros, sizeof(Libro), cantLibros, PATH_LIBRO);
+	getDatos(libros, sizeof(Libro), PATH_LIBRO);
 	listLibros(libros, cantLibros);
 	tecla();
 }
@@ -38,13 +38,14 @@ void listAllLibros() {
 void consultarLibro(){
 	header("CONSULTAR REGISTRO", "LIBROS");
 	printf("ISBN: ");
-	long long ISBN = capturaCaracter(13, false);
+	size_t ISBN = capturaCaracter(13, false);
 	insertarLineas(2);
 	if(existeLibro(ISBN)){
+		Libro *libroPtr = getDato(ISBN, PATH_LIBRO, sizeof(Libro), compareLibroISBN);
 		lineaDeColor(YELLOW, BLACK);
 		printf("Id\tTitulo\t\t\t\tStock\tISBN\n\n");
 		color(BLACK, WHITE);
-		mostrarLibro(getLibro(ISBN));
+		mostrarLibro(*libroPtr);
 	} else{
 		aviso("NO EXISTE ESE LIBRO", RED, WHITE);
 		cancelar();
@@ -56,9 +57,17 @@ void cargarDatos() {
 	FILE* fLibro = fopen(PATH_LIBRO, "r+b");
 	Libro libro;
 
-	libro.ID_libro = getCantLibros();
+	libro.ID_libro = getCantDatos(PATH_LIBRO, sizeof(Libro)) + 1;
 	libro.ID_autor = 10; // Cambiar.
-	libro.ID_genero = 15; // Cambiar.
+	altaGenero();
+	listarGeneros();
+	Genero *generoPtr = (Genero *)getDato(2, PATH_GENERO, sizeof(Genero), compareGeneroID);
+	if (generoPtr != NULL){
+		Genero g = *generoPtr;
+		libro.ID_genero = g.ID_genero;
+		printf("id genero: %d\n", libro.ID_genero);
+	}
+	libro.ID_genero = 15;
 	libro.ID_editorial = 20; // Cambiar.
 	libro.stock = 1; // Cambiar.
 
@@ -70,7 +79,7 @@ void cargarDatos() {
 	} else{
 		insertarLineas(2);
 		aviso("REGISTRO ENCONTRADO, SE ACTUALIZO EL STOCK", BLUE, WHITE);
-		libro = getLibro(libro.ISBN);
+		libro = *(Libro*)getDato(libro.ISBN, PATH_LIBRO, sizeof(Libro), compareLibroISBN);
 		libro.stock++;
 		fseek(fLibro, getPosLibro(libro.ISBN), SEEK_SET);
 	}
@@ -79,34 +88,6 @@ void cargarDatos() {
 		fwrite(&libro, sizeof(libro), 1, fLibro);
 	}
 	fclose(fLibro);
-}
-
-int getCantLibros(){
-	FILE* fLibro = fopen(PATH_LIBRO, "rb");
-	fseek(fLibro,0L,SEEK_END);
-	int cantLibros = (ftell(fLibro) / sizeof(Libro)) + 1;
-	fclose(fLibro);
-	return cantLibros; // Determina la posición del último libro agregado basándose en la última posición del puntero de archivo.
-}
-
-void getLibros(Libro libros[]){
-	FILE* fLibro = fopen(PATH_LIBRO, "rb");
-	Libro libro;
-	int i = 0;
-	fseek(fLibro, 0L, SEEK_SET);
-	fread(&libro, sizeof(libro), 1, fLibro);
-	while(!feof(fLibro)){
-		libros[i] = libro;
-		fread(&libro, sizeof(libro), 1, fLibro);
-		i++;
-	}
-	fclose(fLibro);
-}
-
-void getDatos(void *data, size_t data_size, size_t num_items, const char *path) {
-	FILE* file = fopen(path, "rb");
-	fread(data, data_size, num_items, file);
-	fclose(file);
 }
 
 void listLibros(Libro libros[], int cantLibros){
@@ -124,43 +105,33 @@ void mostrarLibro(Libro libro){
 	printf("%d\t%-25s\t%d\t%lld\n", libro.ID_libro, libro.titulo, libro.stock, libro.ISBN);
 }
 
-int getPosLibro(long long ISBN){
-	FILE* fLibro = fopen(PATH_LIBRO, "rb");
-	Libro libro;
+int getPosLibro(size_t ISBN){
+	int cantLibros = getCantDatos(PATH_LIBRO, sizeof(Libro));
+	Libro libros[cantLibros];
 	int pos = -1;
-	fseek(fLibro, 0L, SEEK_SET);
-	while(fread(&libro, sizeof(libro), 1, fLibro)){
-		if(libro.ISBN == ISBN){
-			pos = ftell(fLibro) - sizeof(Libro);
+	getDatos(libros, sizeof(Libro), PATH_LIBRO);
+
+	for(int i = 0; i < cantLibros; i++){
+		if(libros[i].ISBN == ISBN){
+			pos = (int) (i * sizeof(Libro));
 		}
 	}
-	fclose(fLibro);
 	return pos; //Devuelve la posición dentro del archivo del libro buscado, y devuelve -1 si no lo encuentra.
 }
 
-Libro getLibro(long long ISBN){
-	FILE* fLibro = fopen(PATH_LIBRO, "rb");
-	Libro libro = {0, 0, 0, 0, 0, "NULL", 0, false };
-	fseek(fLibro, getPosLibro(ISBN), SEEK_SET);
-	if(getPosLibro(ISBN) != -1){
-		fread(&libro, sizeof(Libro), 1, fLibro);
-	}
-	fclose(fLibro);
-	return libro;
-}
-
-boolean existeLibro(long long ISBN){
+boolean existeLibro(size_t ISBN){
 	boolean estado = true;
-	Libro libro = getLibro(ISBN);
-	if(sonIguales(libro.titulo, "NULL")){
+	Libro *libroPtr = getDato(ISBN, PATH_LIBRO, sizeof(Libro), compareLibroISBN);
+	if(libroPtr == NULL){
 		estado = false;
 	}
 	return estado;
 }
 
-void borrarLibro (long long ISBN){
+void borrarLibro(const size_t ISBN){
 	FILE* fLibro = fopen(PATH_LIBRO, "r+b");
-	Libro libro = getLibro(ISBN);
+	Libro *libroPtr = getDato(ISBN, PATH_LIBRO, sizeof(Libro), compareLibroISBN);
+	Libro libro = *libroPtr;
 	fseek(fLibro, getPosLibro(ISBN), SEEK_SET);
 
 	if(libro.stock > 0){
@@ -176,6 +147,33 @@ void borrarLibro (long long ISBN){
 	fclose(fLibro);
 }
 
-void altaGenero(){
+boolean compareLibroISBN(const size_t a, const void *b) {
+	return a == ((Libro *)b)->ISBN;
+}
 
+void altaGenero(){
+	FILE* fGenero = fopen(PATH_GENERO, "r+b");
+	Genero genero;
+	fseek(fGenero, 0, SEEK_END);
+	genero.ID_genero = getCantDatos(PATH_GENERO, sizeof(Genero)) + 1;
+	leerString("Ingrese el nombre del genero: ", genero.tipo);
+	fwrite(&genero, sizeof(genero), 1, fGenero);
+	fclose(fGenero);
+}
+
+boolean compareGeneroID(const size_t a, const void *b) {
+	return a == ((Genero *)b)->ID_genero;
+}
+
+void listarGeneros(){
+	int	cantGeneros = getCantDatos(PATH_GENERO, sizeof(Genero));
+	Genero generos[cantGeneros];
+	getDatos(generos, sizeof(Genero), PATH_GENERO);
+
+	lineaDeColor(YELLOW, BLACK);
+	printf("Id\tTipo\t\n\n");
+	color(BLACK, WHITE);
+	for (int i = 0; i < cantGeneros; i++) {
+		printf("%d\t%-25s\n", generos[i].ID_genero, generos[i].tipo);
+	}
 }

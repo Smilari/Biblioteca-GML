@@ -37,7 +37,7 @@ void menuPrestamos();
 // FUNCIONES DE UTILIDAD
 void insertarCaracteres(int cant, char caracter);
 int getKey();
-long long int capturaCaracter(int cantCaracteres, boolean flagTopeCaracteres);
+size_t capturaCaracter(int cantCaracteres, boolean flagTopeCaracteres);
 void header(string titulo, string etiqueta);
 int posCentrado(int ancho);
 void clean();

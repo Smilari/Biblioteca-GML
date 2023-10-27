@@ -282,7 +282,7 @@ void clean(){
 	      después de presionar ENTER.
 	@return El número entero capturado desde el teclado. */
 
-long long int capturaCaracter(int cantCaracteres, boolean flagTopeCaracteres) {
+size_t capturaCaracter(int cantCaracteres, boolean flagTopeCaracteres) {
 	char key;
 	long long valorNumerico = 0;
 	int digito = 0;

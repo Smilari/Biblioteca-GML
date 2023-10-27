@@ -2,6 +2,7 @@
 #define ARCHIVOS_H_
 #include "utils.h"
 
+
 #define PATH_EDITORIAL "Archivos/Editorial.dat"
 #define PATH_AUTOR "Archivos/Autor.dat"
 #define PATH_GENERO "Archivos/Genero.dat"
@@ -17,6 +18,11 @@ typedef struct{
 
 void verificaArchivos();
 void crearDirectorio();
+
+size_t getSizeFromPath(const string path);
+int getCantDatos(const string path, size_t dataSize);
+void getDatos(void *data, size_t dataSize, const string path);
+void *getDato(size_t searchNumber, const string path, size_t dataSize, boolean (*comparar)(const size_t, const void*));
 
 #include "../Archivos.c"
 #endif /* ARCHIVOS_H_*/

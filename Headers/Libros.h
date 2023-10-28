@@ -2,6 +2,7 @@
 #define LIBROS_H_
 #include "utils.h"
 
+/* DEFINICIONES */
 typedef struct {
 	int ID_libro;
 	int ID_autor;
@@ -24,11 +25,10 @@ typedef struct {
 
 typedef struct {
 	int ID_autor;
-	string nombre;
-	string apellido;
+	string nombreCompleto;
 } Autor;
 
-
+/* DEFINICIONES DE METODOS */
 // OPCIONES DEL MENU
 void altaLibro();
 void bajaLibro();
@@ -36,20 +36,33 @@ void modificarLibro();
 void listAllLibros();
 void consultarLibro();
 
+// FUNCIONES DE UTILIDAD PARA AUTOR
+int altaAutor();
+void listarAutores();
+
+// FUNCIONES DE UTILIDAD PARA EDITORIAL
+int altaEditorial();
+void listarEditoriales();
 
 // FUNCIONES DE UTILIDAD PARA GENERO
-void altaGenero();
-boolean compareGeneroID(const size_t a, const void *b);
+int altaGenero();
+boolean compareGeneroID(const void *searchValue, const void *data);
 void listarGeneros();
 
 // FUNCIONES DE UTILIDAD PARA LIBRO
 void cargarDatos();
-void listLibros(Libro libros[], int cantLibros);
+void listLibros(Libro libros[], int cantLibros, boolean incluirStockCero);
 void mostrarLibro(Libro libro);
-int getPosLibro(size_t ISBN);
-boolean existeLibro(size_t ISBN);
 void borrarLibro (size_t ISBN);
-boolean compareLibroISBN(size_t a, const void *b);
+
+// FUNCIONES DE COMPARACIÓN
+boolean compareLibroISBN(const void *searchValue, const void *data);
+boolean compareGeneroID(const void *searchValue, const void *data);
+boolean compareGeneroTipo(const void *searchValue, const void *data);
+boolean compareEditorialNombre(const void *searchValue, const void *data);
+boolean compareEditorialID(const void *searchValue, const void *data);
+boolean compareAutorNombre(const void *searchValue, const void *data);
+boolean compareAutorID(const void *searchValue, const void *data);
 
 #include "../Libros.c"
 #endif /*LIBROS_H_*/

@@ -148,6 +148,7 @@ int menu(OpcionesMenu om[], Coordenada xy, int cantOpciones) {
 		}
 		printMenu(om, xy, opcion, cantOpciones); // Muestra la opción seleccionada.
 	} while (key != ENTER && key != ESC); // Continúa el bucle hasta que se presione ENTER o ESC.
+	_setcursortype(_SOLIDCURSOR); // Restablece el cursor a su estado sólido.
 	return opcion; // Retorna el índice de la opción seleccionada por el usuario.
 }
 
@@ -215,6 +216,7 @@ int subMenu(OpcionesMenu om[], Coordenada xy, int cantOpciones) {
 		}
 		printSubMenu(om, xy, opcion, cantOpciones); // Muestra la opción seleccionada.
 	} while (key != ENTER && key != ESC); // Continúa el bucle hasta que se presione ENTER o ESC.
+	_setcursortype(_SOLIDCURSOR); // Restablece el cursor a su estado sólido.
 	return opcion; // Retorna el índice de la opción seleccionada por el usuario.
 }
 
@@ -333,7 +335,9 @@ void aviso(string texto, int bgd, int txt) {
 boolean guardarCambios() {
 	OpcionesMenu sm[] = {"GUARDAR", "CANCELAR"};
 
+	gotoxy(0, ALTO_PANTALLA-5);
 	boolean estado = subMenu(sm, getCoordenada(), SIZEOFARRAY(sm)); // Muestra el submenú y obtiene la opción seleccionada.
+
 	if(!estado){
 		guardar(); // Si se eligió "GUARDAR", se muestra por pantalla.
 	}else{
@@ -383,4 +387,17 @@ void lineaDeColor(int bgd, int txt){
 	color(bgd, txt);
 	insertarCaracteres(ANCHO_PANTALLA, ' '); // Inserta caracteres en blanco para crear la línea.
 	gotoxy(0, getCoordenada().y); // Vuelve a posicionar el cursor al comienzo de la línea.
+}
+
+/** @brief Limpia la pantalla desde una fila específica hacia abajo.
+	@param y La fila a partir de la cual se limpiará la pantalla. */
+
+void clearScreenFrom(int y){
+	_setcursortype(_NOCURSOR); // Oculta el cursor.
+	gotoxy(0, y); // Posiciona el cursor en la fila especificada.
+	for (int i = y; i < ALTO_PANTALLA; i++){
+		insertarCaracteres(ANCHO_PANTALLA, ' '); // Inserta caracteres en blanco para limpiar la fila.
+	}
+	gotoxy(0, y); // Vuelve a posicionar el cursor en la fila.
+	_setcursortype(_SOLIDCURSOR); // Restablece el cursor a su estado sólido.
 }

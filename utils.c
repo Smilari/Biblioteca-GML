@@ -505,7 +505,9 @@ void recuadroSimple(int alto, int ancho) {
 }
 
 void _setcursortype(int cur_t) {
+	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO ci;
+	GetConsoleCursorInfo(out, &ci);
 
 	switch (cur_t) {
 		case _NOCURSOR://     (turns off the cursor)
@@ -524,5 +526,5 @@ void _setcursortype(int cur_t) {
 			ci.dwSize = 50;
 			break;
 	}
+	SetConsoleCursorInfo(out, &ci);
 }
-

@@ -2,7 +2,7 @@
 #define ARCHIVOS_H_
 #include "utils.h"
 
-
+/* DEFINICIONES */
 #define PATH_EDITORIAL "Archivos/Editorial.dat"
 #define PATH_AUTOR "Archivos/Autor.dat"
 #define PATH_GENERO "Archivos/Genero.dat"
@@ -16,13 +16,17 @@ typedef struct{
 	stringPath ruta;
 } Archivo;
 
+/* DEFINICIONES DE METODOS */
 void verificaArchivos();
 void crearDirectorio();
 
+// MANEJO DE DATOS EN ARCHIVOS
 size_t getSizeFromPath(const string path);
 int getCantDatos(const string path, size_t dataSize);
-void getDatos(void *data, size_t dataSize, const string path);
-void *getDato(size_t searchNumber, const string path, size_t dataSize, boolean (*comparar)(const size_t, const void*));
+void getDatos(void *data, const string path, size_t dataSize);
+void *getDato(const void *searchValue, const string path, size_t dataSize, boolean (*comparar)(const void *, const void *));
+int getPosDato(const void *searchValue, const string path, size_t dataSize, boolean (*comparar)(const void *, const void *));
+boolean existeDato(const void* dato);
 
 #include "../Archivos.c"
 #endif /* ARCHIVOS_H_*/

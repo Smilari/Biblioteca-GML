@@ -7,7 +7,6 @@
 #include "Headers/utils.h"
 
 /* DEFINICIONES */
-
 typedef struct {
 	int ID_socio;
 	string nombre;
@@ -32,9 +31,6 @@ void bienvenida();
 void salida();
 
 int main() {
-	HWND console = GetConsoleWindow();
-	SetWindowLong(console, GWL_STYLE, GetWindowLong(console, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
-	system("MODE 80, 25");
 	bienvenida();
     verificaArchivos();
 	menuPrincipal();
@@ -43,8 +39,10 @@ int main() {
 }
 
 void bienvenida(){
+	HWND console = GetConsoleWindow();
+	SetWindowLong(console, GWL_STYLE, GetWindowLong(console, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
+	system("MODE 120, 40");
 	clean();
-	tecla();
 }
 
 void salida() {

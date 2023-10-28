@@ -3,8 +3,8 @@
 #include "utils.h"
 
 #define ANCHO_MENU 30
-#define ANCHO_PANTALLA 80
-#define ALTO_PANTALLA 25
+#define ANCHO_PANTALLA 120
+#define ALTO_PANTALLA 40
 #define UP_ARROW 72
 #define DOWN_ARROW 80
 #define LEFT_ARROW 75
@@ -14,6 +14,7 @@
 #define BACKSPACE 8
 #define POS_MENU_X ((ANCHO_PANTALLA - ANCHO_MENU)/2)
 #define POS_MENU_Y 5
+#define POS_Y_AFTER_HEADER 5
 
 #define SIZEOFARRAY(arr) sizeof(arr) / sizeof(*arr)
 
@@ -47,6 +48,7 @@ void cancelar();
 void insertarLineas(int cantLineas);
 void aviso(string texto, int bgd, int txt);
 void lineaDeColor(int bgd, int txt);
+void clearScreenFrom(int y);
 
 #include "../Interfaz.c"
 #endif //INTERFAZ_H

@@ -418,8 +418,9 @@ void gotoxy(int x, int y) {
 
 void color(int Background, int Texto) {
 	HANDLE Console = GetStdHandle(STD_OUTPUT_HANDLE);
-	int New_Color = Texto + (Background * 16);
-	SetConsoleTextAttribute(Console, New_Color);
+//	int New_Color = Texto + (Background * 16);
+	WORD wColor = ((Background & 0x0F) << 4) + (Texto & 0x0F);
+	SetConsoleTextAttribute(Console, wColor);
 }
 
 int wherex() {

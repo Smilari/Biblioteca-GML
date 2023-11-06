@@ -14,7 +14,8 @@
 #define BACKSPACE 8
 #define POS_MENU_X ((ANCHO_PANTALLA - ANCHO_MENU)/2)
 #define POS_MENU_Y 5
-#define POS_Y_AFTER_HEADER 5
+#define POS_Y_AFTER_HEADER 6
+#define OPCIONES_A_MOSTRAR 10
 
 #define SIZEOFARRAY(arr) sizeof(arr) / sizeof(*arr)
 
@@ -39,16 +40,20 @@ void menuPrestamos();
 void insertarCaracteres(int cant, char caracter);
 int getKey();
 size_t capturaCaracter(int cantCaracteres, boolean flagTopeCaracteres);
-void header(string titulo, string etiqueta);
+void header(string titulo, string etiqueta, int bgd, int txt);
 int posCentrado(int ancho);
+int posDerecha(int ancho);
 void clean();
 boolean guardarCambios();
 void guardar();
 void cancelar();
 void insertarLineas(int cantLineas);
 void aviso(string texto, int bgd, int txt);
+void avisoCorto(string texto, int bgd, int txt);
+void lineaColorEn(int bgd, int txt, int ancho, int xInicial);
 void lineaDeColor(int bgd, int txt);
 void clearScreenFrom(int y);
+int dataMenu(const void *data, const string path, size_t dataSize, int y, void (*printFunction)(const void *data, int y, int opcion, int cantDatos));
 
 #include "../Interfaz.c"
 #endif //INTERFAZ_H

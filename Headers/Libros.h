@@ -38,27 +38,33 @@ void consultarLibro();
 
 // FUNCIONES DE UTILIDAD PARA AUTOR
 int altaAutor();
-void listarAutores();
+int asignarAutor();
+void printAutores(const void *data, int y, int opcion, int cantDatos);
 
 // FUNCIONES DE UTILIDAD PARA EDITORIAL
 int altaEditorial();
-void listarEditoriales();
+int asignarEditorial();
+void printEditoriales(const void *data, int y, int opcion, int cantDatos);
+
 
 // FUNCIONES DE UTILIDAD PARA GENERO
 int altaGenero();
-boolean compareGeneroID(const void *searchValue, const void *data);
-void listarGeneros();
+int asignarGenero();
+void printGeneros(const void *data, int y, int opcion, int cantDatos);
+
 
 // FUNCIONES DE UTILIDAD PARA LIBRO
 void cargarDatos();
 void listLibros(Libro libros[], int cantLibros, boolean incluirStockCero);
 void mostrarLibro(Libro libro);
-void borrarLibro (size_t ISBN);
+void borrarLibro (Libro *libro);
+void printLibros(const void *data, int y, int opcion, int cantDatos);
 
 // FUNCIONES DE COMPARACIÓN
 boolean compareLibroISBN(const void *searchValue, const void *data);
-boolean compareGeneroID(const void *searchValue, const void *data);
+boolean compareLibroID(const void *searchValue, const void *data);
 boolean compareGeneroTipo(const void *searchValue, const void *data);
+boolean compareGeneroID(const void *searchValue, const void *data);
 boolean compareEditorialNombre(const void *searchValue, const void *data);
 boolean compareEditorialID(const void *searchValue, const void *data);
 boolean compareAutorNombre(const void *searchValue, const void *data);

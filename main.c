@@ -8,16 +8,6 @@
 
 /* DEFINICIONES */
 typedef struct {
-	int ID_socio;
-	string nombre;
-	string apellido;
-	int DNI;
-	int telefono;
-	string direccion;
-	string mail;
-} Socio;
-
-typedef struct {
 	int ID_prestamo;
 	int ID_libro;
 	int ID_socio;

@@ -58,7 +58,7 @@ void modificarGenero();
 
 
 // FUNCIONES DE UTILIDAD PARA LIBRO
-void cargarDatos();
+void cargarDatosLibro();
 void listLibros(Libro libros[], int cantLibros, boolean incluirStockCero);
 void mostrarLibro(Libro libro);
 void borrarLibro (Libro *libro);

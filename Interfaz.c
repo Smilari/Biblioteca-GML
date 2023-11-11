@@ -42,7 +42,7 @@ void menuPrincipal() {
 }
 
 void menuSocios() {
-	OpcionesMenu om[] = {"            SOCIOS", "ALTA", "BAJA", "MODIFICACION", "LISTAR", "CONSULTAR",
+	OpcionesMenu om[] = {"            SOCIOS", "ALTA", "LISTAR", "CONSULTAR",
 						 "VOLVER AL MENU PRINCIPAL"};
 	int opcionSeleccionada;
 	int cantOpciones = SIZEOFARRAY(om);
@@ -52,6 +52,7 @@ void menuSocios() {
 		clean();
 		switch (opcionSeleccionada) {
 			case 1:
+				altaSocio();
 				break;
 			case 2:
 				break;

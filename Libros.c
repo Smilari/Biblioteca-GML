@@ -5,7 +5,7 @@
  */
 void altaLibro(){
 	header("ALTA DE REGISTRO", "LIBROS", LGREEN, WHITE);
-	cargarDatos();
+	cargarDatosLibro();
 	tecla();
 }
 
@@ -82,7 +82,7 @@ void consultarLibro(){
 /**@brief Esta función muestra una interfaz que permite al usuario cargar información sobre un libro en la base de datos de libros.
  * Si el libro ya existe en la base de datos (según su ISBN), actualiza el stock. Si no existe, registra un nuevo libro.
  */
-void cargarDatos() {
+void cargarDatosLibro() {
 	FILE* fLibro = fopen(PATH_LIBRO, "r+b");
 	Libro libro;
 

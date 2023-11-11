@@ -35,6 +35,7 @@ void menuPrincipal();
 void menuSocios();
 void menuLibros();
 void menuPrestamos();
+void menuModificar();
 
 // FUNCIONES DE UTILIDAD
 void insertarCaracteres(int cant, char caracter);
@@ -53,7 +54,7 @@ void avisoCorto(string texto, int bgd, int txt);
 void lineaColorEn(int bgd, int txt, int ancho, int xInicial);
 void lineaDeColor(int bgd, int txt);
 void clearScreenFrom(int y);
-int dataMenu(const void *data, const string path, size_t dataSize, int y, void (*printFunction)(const void *data, int y, int opcion, int cantDatos));
+int dataMenu(const string path, size_t dataSize, int y, void (*printFunction)(const void *, int, int, int));
 
 #include "../Interfaz.c"
 #endif //INTERFAZ_H

@@ -80,7 +80,7 @@ void menuLibros() {
 				bajaLibro();
 				break;
 			case 3:
-				modificarLibro();
+				menuModificar();
 				break;
 			case 4:
 				listAllLibros();
@@ -113,6 +113,33 @@ void menuPrestamos() {
 		}
 	} while (opcionSeleccionada != (cantOpciones - 1));
 }
+
+void menuModificar() {
+	OpcionesMenu om[] = {"      MODIFICAR REGISTRO", "LIBRO", "AUTOR", "EDITORIAL", "GENERO",
+						 "VOLVER AL MENU PRINCIPAL"};
+	int opcionSeleccionada;
+	int cantOpciones = SIZEOFARRAY(om);
+	Coordenada xy = {POS_MENU_X, POS_MENU_Y};
+	do {
+		opcionSeleccionada = menu(om, xy, cantOpciones);
+		clean();
+		switch (opcionSeleccionada) {
+			case 1:
+				modificarLibro();
+				break;
+			case 2:
+				modificarAutor();
+				break;
+			case 3:
+				modificarEditorial();
+				break;
+			case 4:
+				modificarGenero();
+				break;
+		}
+	} while (opcionSeleccionada != (cantOpciones - 1));
+}
+
 
 /**@brief Esta función muestra un menú en pantalla y permite al usuario navegar entre las opciones.
  *
@@ -465,7 +492,7 @@ void clearScreenFrom(int y){
  *
  * @return El índice de la opción seleccionada por el usuario (comienza en 1), pudiendo ser -1 si se presionó ESC.
  */
-int dataMenu(const void *data, const string path, size_t dataSize, int y, void (*printFunction)(const void *data, int y, int opcion, int cantDatos)) {
+int dataMenu(const string path, size_t dataSize, int y, void (*printFunction)(const void *, int, int, int)) {
 	int opcion = -1;
 	int key;
 	int cantDatos = getCantDatos(path, dataSize); // Obtiene la cantidad de datos en el archivo.
@@ -500,5 +527,6 @@ int dataMenu(const void *data, const string path, size_t dataSize, int y, void (
 		printFunction(datos, y, opcion, cantDatos);
 	} while (key != ENTER && key != ESC); // Continúa el bucle hasta que se presione ENTER o ESC.
 	_setcursortype(_SOLIDCURSOR); // Restablece el cursor a su estado sólido.
+	clearScreenFrom(y);
 	return opcion + 1; // Retorna el índice de la opción seleccionada por el usuario.
 }

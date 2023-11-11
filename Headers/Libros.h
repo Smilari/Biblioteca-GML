@@ -4,27 +4,27 @@
 
 /* DEFINICIONES */
 typedef struct {
-	int ID_libro;
-	int ID_autor;
-	int ID_genero;
-	int ID_editorial;
+	size_t ID_libro;
+	size_t ID_autor;
+	size_t ID_genero;
+	size_t ID_editorial;
 	size_t ISBN;
 	string titulo;
 	int stock;
 } Libro;
 
 typedef struct {
-	int ID_editorial;
+	size_t ID_editorial;
 	string nombre;
 } Editorial;
 
 typedef struct {
-	int ID_genero;
-	string tipo;
+	size_t ID_genero;
+	string nombre;
 } Genero;
 
 typedef struct {
-	int ID_autor;
+	size_t ID_autor;
 	string nombreCompleto;
 } Autor;
 
@@ -36,21 +36,25 @@ void modificarLibro();
 void listAllLibros();
 void consultarLibro();
 
+void headerRegistro(string aviso);
+
 // FUNCIONES DE UTILIDAD PARA AUTOR
-int altaAutor();
-int asignarAutor();
+size_t altaAutor();
+size_t asignarAutor();
 void printAutores(const void *data, int y, int opcion, int cantDatos);
+void modificarAutor();
 
 // FUNCIONES DE UTILIDAD PARA EDITORIAL
-int altaEditorial();
-int asignarEditorial();
+size_t altaEditorial();
+size_t asignarEditorial();
 void printEditoriales(const void *data, int y, int opcion, int cantDatos);
-
+void modificarEditorial();
 
 // FUNCIONES DE UTILIDAD PARA GENERO
-int altaGenero();
-int asignarGenero();
+size_t altaGenero();
+size_t asignarGenero();
 void printGeneros(const void *data, int y, int opcion, int cantDatos);
+void modificarGenero();
 
 
 // FUNCIONES DE UTILIDAD PARA LIBRO
@@ -63,7 +67,7 @@ void printLibros(const void *data, int y, int opcion, int cantDatos);
 // FUNCIONES DE COMPARACIÓN
 boolean compareLibroISBN(const void *searchValue, const void *data);
 boolean compareLibroID(const void *searchValue, const void *data);
-boolean compareGeneroTipo(const void *searchValue, const void *data);
+boolean compareGeneroNombre(const void *searchValue, const void *data);
 boolean compareGeneroID(const void *searchValue, const void *data);
 boolean compareEditorialNombre(const void *searchValue, const void *data);
 boolean compareEditorialID(const void *searchValue, const void *data);

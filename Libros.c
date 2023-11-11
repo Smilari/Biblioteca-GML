@@ -16,14 +16,9 @@ void altaLibro(){
  */
 void bajaLibro(){
 	header("BAJA DE REGISTRO", "LIBROS", LRED, WHITE);
-
-	int cantDatos = getCantDatos(PATH_LIBRO, sizeof(Libro));
-	Libro libros[cantDatos];
-	getDatos(libros, PATH_LIBRO, sizeof(Libro));
 	Libro *libroPtr;
 
-	size_t opcion = dataMenu(libros, PATH_LIBRO, sizeof(Libro), POS_Y_AFTER_HEADER, printLibros);
-	clearScreenFrom(POS_Y_AFTER_HEADER);
+	size_t opcion = dataMenu(PATH_LIBRO, sizeof(Libro), POS_Y_AFTER_HEADER, printLibros);
 
 	if(opcion == 0){
 		printf("ISBN: ");
@@ -167,7 +162,7 @@ void mostrarLibro(Libro libro){
 	id = libro.ID_autor;
 	Autor autor = *(Autor*)getDato(&id, PATH_AUTOR, sizeof(Autor), compareAutorID);
 
-	printf("%d\t%-22s\t%d\t%-13lld\t%-14s\t%-22s\t%s\n", libro.ID_libro, libro.titulo, libro.stock, libro.ISBN, genero.tipo, autor.nombreCompleto, editorial.nombre);
+	printf("%-2d\t%-22s\t%d\t%-13lld\t%-14s\t%-22s\t%s\n", libro.ID_libro, libro.titulo, libro.stock, libro.ISBN, genero.nombre, autor.nombreCompleto, editorial.nombre);
 }
 
 /**@brief Esta función disminuye el stock de un libro en la base de datos de libros.
@@ -178,7 +173,8 @@ void mostrarLibro(Libro libro){
  */
 void borrarLibro(Libro *libro){
 	FILE* fLibro = fopen(PATH_LIBRO, "r+b");
-	fseek(fLibro, getPosDato(&libro->ISBN, PATH_LIBRO, sizeof(Libro), compareLibroISBN), SEEK_SET); // Se mueve a la posición del libro en el archivo.
+	fseek(fLibro, getPosDato(&libro->ISBN, PATH_LIBRO, sizeof(Libro), compareLibroISBN), SEEK_SET);
+	// Se mueve a la posición del libro en el archivo.
 
 	if(libro->stock > 0){ // Si el libro tiene stock disponible, lo disminuye en 1.
 		libro->stock--;
@@ -207,8 +203,7 @@ void printLibros(const void *data, int y, int opcion, int cantDatos){
 	int x = posCentrado(ANCHO_PANTALLA);
 	gotoxy(x, y);
 	avisoCorto("Seleccione un libro", BLUE, WHITE);
-	y = y + 2;
-	gotoxy(x, y);
+	gotoxy(x, y = y + 2);
 	lineaDeColor(WHITE, BLACK);
 	printf("Id\tTitulo\t\t\tStock\tISBN\t\tGenero\t\tAutor\t\t\tEditorial\n\n");
 	y++;
@@ -223,12 +218,25 @@ void printLibros(const void *data, int y, int opcion, int cantDatos){
 		if(i < cantDatos){
 			gotoxy(x, y - 1);
 			if(i == -1){
-				printf("x\tIngreso manual");
+				printf(" \tIngreso manual (Esc)");
 			} else{
 				mostrarLibro(libros[i]);
 			}
 		}
 	}
+}
+
+void headerRegistro(string aviso){
+	const int ancho = 30;
+	int x = posCentrado(ancho);
+	int y = getCoordenada().y;
+	gotoxy(x, y);
+	avisoCorto(aviso, BLUE, WHITE);
+	gotoxy(x, y = y + 2);
+	lineaColorEn(WHITE, BLACK, ancho, x);
+	printf("Id\tNombre");
+	gotoxy(x, y + 1);
+	color(BLACK, WHITE);
 }
 
 /**@brief Agrega un nuevo género a la base de datos de géneros o recupera un género existente.
@@ -237,15 +245,15 @@ void printLibros(const void *data, int y, int opcion, int cantDatos){
  *
  * @return El ID del género agregado o recuperado.
  */
-int altaGenero(){
+size_t altaGenero(){
 	FILE* fGenero = fopen(PATH_GENERO, "r+b");
 	Genero genero;
 
 	clearScreenFrom(POS_Y_AFTER_HEADER);
 	genero.ID_genero = getCantDatos(PATH_GENERO, sizeof(Genero)) + 1; // Asigna un ID de género único y consecutivo al último registrado.
-	leerString("Genero: ", genero.tipo);
+	leerString("Genero: ", genero.nombre);
 
-	Genero *generoPtr = getDato(&genero.tipo, PATH_GENERO, sizeof(Genero), compareGeneroTipo);
+	Genero *generoPtr = getDato(&genero.nombre, PATH_GENERO, sizeof(Genero), compareGeneroNombre);
 
 	if(existeDato(generoPtr)){ // Si el género ya existe en la base de datos, lo recupera.
 		genero = *generoPtr;
@@ -270,14 +278,11 @@ int altaGenero(){
 void printGeneros(const void *data, int y, int opcion, int cantDatos){
 	const Genero *generos =  (const Genero *)data;
 	const int ancho = 30;
-	int x = posCentrado(ancho);
-	gotoxy(x, y);
-	avisoCorto("Seleccione un genero", BLUE, WHITE);
-	y = y + 2;
-	gotoxy(x, y);
-	lineaColorEn(WHITE, BLACK, ancho, x);
-	printf("Id\tTipo");
-	y++;
+	gotoxy(0, y);
+	headerRegistro("Seleccione un genero");
+	int x = getCoordenada().x;
+	y = getCoordenada().y;
+	gotoxy(x,y + 1);
 	for (int i = opcion; i < (opcion + OPCIONES_A_MOSTRAR); ++i){
 		if(i == opcion) {
 			color(YELLOW, BLACK);
@@ -289,10 +294,9 @@ void printGeneros(const void *data, int y, int opcion, int cantDatos){
 		if(i < cantDatos){
 			gotoxy(x, y - 1);
 			if(i == -1){
-				gotoxy(posCentrado(14), y - 1);
-				printf("Ingreso manual");
+				printf("   Ingreso manual (Esc)");
 			} else{
-				printf("%-2d\t%-25s\n", generos[i].ID_genero, generos[i].tipo);
+				printf("%-2d\t%-25s\n", generos[i].ID_genero, generos[i].nombre);
 			}
 		}
 	}
@@ -304,15 +308,43 @@ void printGeneros(const void *data, int y, int opcion, int cantDatos){
  *
  * @return El ID del género asignado al libro.
  */
-int asignarGenero(){
-	int cantDatos = getCantDatos(PATH_GENERO, sizeof(Genero));
-	Genero generos[cantDatos];
-	getDatos(generos, PATH_GENERO, sizeof(Genero));
-	int opcion = dataMenu(generos, PATH_GENERO, sizeof(Genero), POS_Y_AFTER_HEADER, printGeneros);
+size_t asignarGenero(){
+	size_t opcion = dataMenu(PATH_GENERO, sizeof(Genero), POS_Y_AFTER_HEADER, printGeneros);
 	if(opcion == 0){
 		opcion = altaGenero();
 	}
 	return opcion;
+}
+
+void modificarGenero(){
+	header("MODIFICAR REGISTRO", "GENERO", BLUE, WHITE);
+	Genero *generoPtr;
+	FILE* fGenero = fopen(PATH_GENERO, "r+b");
+
+	size_t opcion = dataMenu(PATH_GENERO, sizeof(Genero), POS_Y_AFTER_HEADER, printGeneros);
+	generoPtr = getDato(&opcion, PATH_GENERO, sizeof(Genero), compareGeneroID);
+
+	if(opcion == 0){
+		string nombre;
+		leerString("Genero: ", nombre);
+		generoPtr = getDato(nombre, PATH_GENERO, sizeof(Genero), compareGeneroNombre);
+		clearScreenFrom(POS_Y_AFTER_HEADER);
+	}
+	if(existeDato(generoPtr)){
+		leerString("Ingrese el nuevo nombre: ", generoPtr->nombre);
+		clearScreenFrom(POS_Y_AFTER_HEADER);
+		headerRegistro("NOMBRE ACTUALIZADO");
+		printf("%-2d\t%-25s\n\n", generoPtr->ID_genero, generoPtr->nombre);
+		if(guardarCambios()){
+			fseek(fGenero, getPosDato(&generoPtr->ID_genero, PATH_GENERO, sizeof(Genero), compareGeneroID), SEEK_SET);
+			fwrite(generoPtr, sizeof(Genero), 1, fGenero);
+		}
+	} else{
+		aviso("NO EXISTE ESE GENERO", RED, WHITE);
+		cancelar();
+	}
+	tecla();
+	fclose(fGenero);
 }
 
 /**@brief Agrega una nueva editorial a la base de datos de editoriales o recupera una editorial existente.
@@ -321,7 +353,7 @@ int asignarGenero(){
  *
  * @return El ID de la editorial agregada o recuperada.
  */
-int altaEditorial(){
+size_t altaEditorial(){
 	FILE* fEditorial = fopen(PATH_EDITORIAL, "r+b");
 	Editorial editorial;
 
@@ -354,14 +386,10 @@ int altaEditorial(){
 void printEditoriales(const void *data, int y, int opcion, int cantDatos){
 	const Editorial *editoriales =  (const Editorial *)data;
 	const int ancho = 30;
-	int x = posCentrado(ancho);
-	gotoxy(x, y);
-	avisoCorto("Seleccione una editorial", BLUE, WHITE);
-	y = y + 2;
-	gotoxy(x, y);
-	lineaColorEn(WHITE, BLACK, ancho, x);
-	printf("Id\tNombre");
-	y++;
+	gotoxy(0, y);
+	headerRegistro("Seleccione una editorial");
+	int x = getCoordenada().x;
+	y = getCoordenada().y;
 	for (int i = opcion; i < (opcion + OPCIONES_A_MOSTRAR); ++i){
 		if(i == opcion) {
 			color(YELLOW, BLACK);
@@ -373,7 +401,7 @@ void printEditoriales(const void *data, int y, int opcion, int cantDatos){
 		if(i < cantDatos){
 			gotoxy(x, y - 1);
 			if(i == -1){
-				printf("[ESC] Ingreso manual");
+				printf("   Ingreso manual (Esc)");
 			} else{
 				printf("%-2d\t%-25s\n", editoriales[i].ID_editorial, editoriales[i].nombre);
 			}
@@ -387,15 +415,43 @@ void printEditoriales(const void *data, int y, int opcion, int cantDatos){
  *
  * @return El ID de la editorial asignado al libro.
  */
-int asignarEditorial(){
-	int cantDatos = getCantDatos(PATH_EDITORIAL, sizeof(Editorial));
-	Editorial editoriales[cantDatos];
-	getDatos(editoriales, PATH_EDITORIAL, sizeof(Editorial));
-	int opcion = dataMenu(editoriales, PATH_EDITORIAL, sizeof(Editorial), POS_Y_AFTER_HEADER, printEditoriales);
+size_t asignarEditorial(){
+	size_t opcion = dataMenu(PATH_EDITORIAL, sizeof(Editorial), POS_Y_AFTER_HEADER, printEditoriales);
 	if(opcion == 0){
 		opcion = altaEditorial();
 	}
 	return opcion;
+}
+
+void modificarEditorial(){
+	header("MODIFICAR REGISTRO", "EDITORIAL", BLUE, WHITE);
+	Editorial *editorialPtr;
+	FILE* fEditorial = fopen(PATH_EDITORIAL, "r+b");
+
+	size_t opcion = dataMenu(PATH_EDITORIAL, sizeof(Editorial), POS_Y_AFTER_HEADER, printEditoriales);
+	editorialPtr = getDato(&opcion, PATH_EDITORIAL, sizeof(Editorial), compareEditorialID);
+
+	if(opcion == 0){
+		string nombre;
+		leerString("Editorial: ", nombre);
+		editorialPtr = getDato(nombre, PATH_EDITORIAL, sizeof(Editorial), compareEditorialNombre);
+		clearScreenFrom(POS_Y_AFTER_HEADER);
+	}
+	if(existeDato(editorialPtr)){
+		leerString("Ingrese el nuevo nombre: ", editorialPtr->nombre);
+		clearScreenFrom(POS_Y_AFTER_HEADER);
+		headerRegistro("NOMBRE ACTUALIZADO");
+		printf("%-2d\t%-25s\n\n", editorialPtr->ID_editorial, editorialPtr->nombre);
+		if(guardarCambios()){
+			fseek(fEditorial, getPosDato(&editorialPtr->ID_editorial, PATH_EDITORIAL, sizeof(Editorial), compareEditorialID), SEEK_SET);
+			fwrite(editorialPtr, sizeof(Editorial), 1, fEditorial);
+		}
+	} else{
+		aviso("NO EXISTE ESA EDITORIAL", RED, WHITE);
+		cancelar();
+	}
+	tecla();
+	fclose(fEditorial);
 }
 
 /** @brief Agrega un nuevo autor a la base de datos de autores o recupera un autor existente.
@@ -404,7 +460,7 @@ int asignarEditorial(){
  *
  * @return El ID del autor agregado o recuperado.
  */
-int altaAutor(){
+size_t altaAutor(){
 	FILE* fAutor = fopen(PATH_AUTOR, "r+b");
 	Autor autor;
 
@@ -437,14 +493,10 @@ int altaAutor(){
 void printAutores(const void *data, int y, int opcion, int cantDatos){
 	const Autor *autores =  (const Autor *)data;
 	const int ancho = 30;
-	int x = posCentrado(ancho);
-	gotoxy(x, y);
-	avisoCorto("Seleccione un autor", BLUE, WHITE);
-	y = y + 2;
-	gotoxy(x, y);
-	lineaColorEn(WHITE, BLACK, ancho, x);
-	printf("Id\tNombre");
-	y++;
+	gotoxy(0, y);
+	headerRegistro("Seleccione un autor");
+	int x = getCoordenada().x;
+	y = getCoordenada().y;
 	for (int i = opcion; i < (opcion + OPCIONES_A_MOSTRAR); ++i){
 		if(i == opcion) {
 			color(YELLOW, BLACK);
@@ -456,7 +508,7 @@ void printAutores(const void *data, int y, int opcion, int cantDatos){
 		if(i < cantDatos){
 			gotoxy(x, y - 1);
 			if(i == -1){
-				printf("[ESC] Ingreso manual");
+				printf("   Ingreso manual (Esc)");
 			} else{
 				printf("%-2d\t%-25s\n", autores[i].ID_autor, autores[i].nombreCompleto);
 			}
@@ -470,15 +522,43 @@ void printAutores(const void *data, int y, int opcion, int cantDatos){
  *
  * @return El ID del autor asignado al libro.
  */
-int asignarAutor(){
-	int cantDatos = getCantDatos(PATH_AUTOR, sizeof(Autor));
-	Autor autores[cantDatos];
-	getDatos(autores, PATH_AUTOR, sizeof(Autor));
-	int opcion = dataMenu(autores, PATH_AUTOR, sizeof(Autor), POS_Y_AFTER_HEADER, printAutores);
+size_t asignarAutor(){
+	size_t opcion = dataMenu(PATH_AUTOR, sizeof(Autor), POS_Y_AFTER_HEADER, printAutores);
 	if(opcion == 0){
 		opcion = altaAutor();
 	}
 	return opcion;
+}
+
+void modificarAutor(){
+	header("MODIFICAR REGISTRO", "AUTOR", BLUE, WHITE);
+	Autor *autorPtr;
+	FILE* fAutor = fopen(PATH_AUTOR, "r+b");
+
+	size_t opcion = dataMenu(PATH_AUTOR, sizeof(Autor), POS_Y_AFTER_HEADER, printAutores);
+	autorPtr = getDato(&opcion, PATH_AUTOR, sizeof(Autor), compareAutorID);
+
+	if(opcion == 0){
+		string nombre;
+		leerString("Autor: ", nombre);
+		autorPtr = getDato(nombre, PATH_AUTOR, sizeof(Autor), compareAutorNombre);
+		clearScreenFrom(POS_Y_AFTER_HEADER);
+	}
+	if(existeDato(autorPtr)){
+		leerString("Ingrese el nuevo nombre: ", autorPtr->nombreCompleto);
+		clearScreenFrom(POS_Y_AFTER_HEADER);
+		headerRegistro("NOMBRE ACTUALIZADO");
+		printf("%-2d\t%-25s\n\n", autorPtr->ID_autor, autorPtr->nombreCompleto);
+		if(guardarCambios()){
+			fseek(fAutor, getPosDato(&autorPtr->ID_autor, PATH_AUTOR, sizeof(Autor), compareAutorID), SEEK_SET);
+			fwrite(autorPtr, sizeof(Autor), 1, fAutor);
+		}
+	} else{
+		aviso("NO EXISTE ESA EDITORIAL", RED, WHITE);
+		cancelar();
+	}
+	tecla();
+	fclose(fAutor);
 }
 
 boolean compareAutorID(const void *searchValue, const void *data) {
@@ -497,8 +577,8 @@ boolean compareEditorialID(const void *searchValue, const void *data) {
 	return *(const size_t*) searchValue == ((Editorial *)data)->ID_editorial;
 }
 
-boolean compareGeneroTipo(const void *searchValue, const void *data) {
-	return sonIguales((char *)searchValue, ((Genero *)data)->tipo, true);
+boolean compareGeneroNombre(const void *searchValue, const void *data) {
+	return sonIguales((char *)searchValue, ((Genero *)data)->nombre, true);
 }
 
 boolean compareLibroISBN(const void *searchValue, const void *data) {

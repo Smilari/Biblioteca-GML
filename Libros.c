@@ -65,7 +65,6 @@ void consultarLibro(){
 	header("CONSULTAR REGISTRO", "LIBROS", LMAGENTA, WHITE);
 	printf("ISBN: ");
 	size_t ISBN = capturaCaracter(13, false);
-	insertarLineas(2);
 
 	Libro *libroPtr = getDato(&ISBN, PATH_LIBRO, sizeof(Libro), compareLibroISBN);
 
@@ -124,8 +123,7 @@ void cargarDatosLibro() {
 	fclose(fLibro);
 }
 
-/**@brief Muestra una lista de libros en la pantalla.
- * Esta función muestra una lista de libros en la pantalla, incluyendo su ID, título, stock, ISBN, género, editorial y autor.
+/**@brief Esta función muestra una lista de libros en la pantalla, incluyendo su ID, título, stock, ISBN, género, editorial y autor.
  * Puede filtrar la lista para incluir o excluir libros con stock igual a cero según el valor de `incluirStockCero`.
  *
  * @param libros Un arreglo de libros que se va a listar.
@@ -146,8 +144,7 @@ void listLibros(Libro libros[], int cantLibros, boolean incluirStockCero) {
 }
 
 
-/**@brief Muestra la información detallada de un libro en la pantalla.
- * Esta función muestra en la pantalla la información detallada de un libro, incluyendo su ID, título, stock, ISBN, género, editorial y autor.
+/**@brief Esta función muestra en la pantalla la información detallada de un libro, incluyendo su ID, título, stock, ISBN, género, editorial y autor.
  * Para obtener la información de género, editorial y autor, se realizan búsquedas en las bases de datos correspondientes.
  *
  * @param libro El libro cuya información se va a mostrar.

@@ -3,7 +3,7 @@
 #include "utils.h"
 
 typedef struct {
-	int ID_socio;
+	size_t ID_socio;
 	string nombre;
 	string apellido;
 	size_t DNI;
@@ -14,8 +14,13 @@ typedef struct {
 
 void altaSocio();
 void cargarDatosSocio();
+void listSocios(Socio socios[], int cantSocios);
+void listAllSocios();
+void mostrarSocio(Socio socio);
+void consultarSocio();
 
 
 boolean compareSocioDNI(const void *searchValue, const void *data);
 
+#include "../Socios.c"
 #endif //SOCIOS_H_

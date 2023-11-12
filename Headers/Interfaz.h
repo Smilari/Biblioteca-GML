@@ -12,6 +12,8 @@
 #define ESC 27
 #define ENTER 13
 #define BACKSPACE 8
+#define ARROBA '@'
+#define PUNTO '.'
 #define POS_MENU_X ((ANCHO_PANTALLA - ANCHO_MENU)/2)
 #define POS_MENU_Y 5
 #define POS_Y_AFTER_HEADER 6
@@ -55,6 +57,8 @@ void lineaColorEn(int bgd, int txt, int ancho, int xInicial);
 void lineaDeColor(int bgd, int txt);
 void clearScreenFrom(int y);
 int dataMenu(const string path, size_t dataSize, int y, void (*printFunction)(const void *, int, int, int));
+boolean verificaMail(string mail);
+boolean esAlfanumerico(char c);
 
 #include "../Interfaz.c"
 #endif //INTERFAZ_H

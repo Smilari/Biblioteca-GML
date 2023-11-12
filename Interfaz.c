@@ -55,10 +55,10 @@ void menuSocios() {
 				altaSocio();
 				break;
 			case 2:
+				listAllSocios();
 				break;
 			case 3:
-				break;
-			case 4:
+				consultarSocio();
 				break;
 		}
 	} while (opcionSeleccionada != (cantOpciones - 1));
@@ -94,8 +94,7 @@ void menuLibros() {
 }
 
 void menuPrestamos() {
-	OpcionesMenu om[] = {"          PRESTAMOS", "LISTAR SOCIOS", "CONSULTA POR ID SOCIO", "LISTAR LIBROS",
-						 "CONSULTA POR ID LIBRO", "VOLVER AL MENU PRINCIPAL"};
+	OpcionesMenu om[] = {"          PRESTAMOS", "NUEVO", "REVOCAR", "LISTAR ", "CONSULTAR", "VOLVER AL MENU PRINCIPAL"};
 	int opcionSeleccionada;
 	int cantOpciones = SIZEOFARRAY(om);
 	Coordenada xy = {POS_MENU_X, POS_MENU_Y};
@@ -104,10 +103,12 @@ void menuPrestamos() {
 		clean();
 		switch (opcionSeleccionada) {
 			case 1:
+				altaPrestamo();
 				break;
 			case 2:
 				break;
 			case 3:
+				listAllPrestamos();
 				break;
 			case 4:
 				break;
@@ -530,4 +531,50 @@ int dataMenu(const string path, size_t dataSize, int y, void (*printFunction)(co
 	_setcursortype(_SOLIDCURSOR); // Restablece el cursor a su estado sólido.
 	clearScreenFrom(y);
 	return opcion + 1; // Retorna el índice de la opción seleccionada por el usuario.
+}
+
+
+/**@brief Esta función comprueba si la cadena de caracteres proporcionada cumple con los requisitos básicos de una
+ * dirección de correo electrónico válida. Los requisitos incluyen la presencia de un solo carácter '@',
+ * caracteres alfanuméricos permitidos antes de '@', y un punto ('.') después de '@'.
+ *
+ * @param mail Cadena de caracteres que se verificará como dirección de correo electrónico.
+ * @return true si la cadena representa una dirección de correo electrónico válida, false en caso contrario.
+ */
+boolean verificaMail(string mail){
+	boolean flagArroba = false; // Indica si se encontró el carácter '@'.
+	boolean flagAntes = true;  // Indica si los caracteres antes del '@' son alfanuméricos.
+	boolean flagPunto = false; // Indica si se encontró el carácter '.' después del '@'.
+
+	// Recorre la cadena de caracteres.
+	for(int i = 0; i < strlen(mail); i++){
+		char c = mail[i];
+
+		// Verifica la presencia del carácter '@'.
+		if(c == ARROBA && i != 0){
+			flagArroba = true;
+		}
+
+		// Verifica los caracteres antes del '@'.
+		if(!flagArroba && !esAlfanumerico(c)){
+			flagAntes = false;
+		}
+
+		// Verifica la presencia del carácter '.' después del '@'.
+		if(flagArroba && c == PUNTO){
+			flagPunto = true;
+		}
+	}
+
+	// La dirección de correo es válida si se encontró el carácter '@', los caracteres antes del '@' son alfanuméricos y se encontró el carácter '.' después del '@'.
+	return (flagArroba && flagAntes && flagPunto);
+}
+
+/**@brief Verifica si un carácter es alfanumérico.
+ *
+ * @param c Carácter a verificar.
+ * @return true si el carácter es alfanumérico, false en caso contrario.
+ */
+boolean esAlfanumerico(char c){
+	return ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
 }

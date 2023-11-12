@@ -116,9 +116,10 @@ int existeArchivo(FILE* pArch);
 void agregarTXT(string archiveName);
 FILE* abrirArchivoBinario(string path, string tipo);
 
-#include "Socios.h"
 #include "Interfaz.h"
 #include "Archivos.h"
 #include "Libros.h"
+#include "Socios.h"
+#include "Prestamos.h"
 #include "../utils.c"
 #endif // UTILS_H_INCLUDED

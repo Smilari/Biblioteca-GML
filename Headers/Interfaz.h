@@ -56,7 +56,8 @@ void avisoCorto(string texto, int bgd, int txt);
 void lineaColorEn(int bgd, int txt, int ancho, int xInicial);
 void lineaDeColor(int bgd, int txt);
 void clearScreenFrom(int y);
-int dataMenu(const string path, size_t dataSize, int y, void (*printFunction)(const void *, int, int, int));
+int dataMenu(const void *data, int cantDatos, int y, void (*printFunction)(const void *, int, int, int));
+int allDataMenu(const string path, size_t dataSize, int y, void (*printFunction)(const void *, int, int, int));
 boolean verificaMail(string mail);
 boolean esAlfanumerico(char c);
 

@@ -18,7 +18,7 @@ void bajaLibro(){
 	header("BAJA DE REGISTRO", "LIBROS", LRED, WHITE);
 	Libro *libroPtr;
 
-	size_t opcion = dataMenu(PATH_LIBRO, sizeof(Libro), POS_Y_AFTER_HEADER, printLibros);
+	size_t opcion = allDataMenu(PATH_LIBRO, sizeof(Libro), POS_Y_AFTER_HEADER, printLibros);
 
 	if(opcion == 0){
 		printf("ISBN: ");
@@ -86,7 +86,6 @@ void cargarDatosLibro() {
 	Libro libro;
 
 	libro.ID_libro = getCantDatos(PATH_LIBRO, sizeof(Libro)) + 1; // Asigna un ID de libro único y consecutivo al último registrado.
-	libro.stock = 1;
 
 	printf("ISBN: ");
 	libro.ISBN = capturaCaracter(13, true);
@@ -100,6 +99,7 @@ void cargarDatosLibro() {
 
 		clearScreenFrom(POS_Y_AFTER_HEADER);
 		leerString("Titulo: ", libro.titulo);
+		libro.stock = leerEnteroEntre(1, 9999, "Stock[Minimo 1]: ");
 
 		fseek(fLibro, 0L, SEEK_END);
 
@@ -306,7 +306,7 @@ void printGeneros(const void *data, int y, int opcion, int cantDatos){
  * @return El ID del género asignado al libro.
  */
 size_t asignarGenero(){
-	size_t opcion = dataMenu(PATH_GENERO, sizeof(Genero), POS_Y_AFTER_HEADER, printGeneros);
+	size_t opcion = allDataMenu(PATH_GENERO, sizeof(Genero), POS_Y_AFTER_HEADER, printGeneros);
 	if(opcion == 0){
 		opcion = altaGenero();
 	}
@@ -318,7 +318,7 @@ void modificarGenero(){
 	Genero *generoPtr;
 	FILE* fGenero = fopen(PATH_GENERO, "r+b");
 
-	size_t opcion = dataMenu(PATH_GENERO, sizeof(Genero), POS_Y_AFTER_HEADER, printGeneros);
+	size_t opcion = allDataMenu(PATH_GENERO, sizeof(Genero), POS_Y_AFTER_HEADER, printGeneros);
 	generoPtr = getDato(&opcion, PATH_GENERO, sizeof(Genero), compareGeneroID);
 
 	if(opcion == 0){
@@ -413,7 +413,7 @@ void printEditoriales(const void *data, int y, int opcion, int cantDatos){
  * @return El ID de la editorial asignado al libro.
  */
 size_t asignarEditorial(){
-	size_t opcion = dataMenu(PATH_EDITORIAL, sizeof(Editorial), POS_Y_AFTER_HEADER, printEditoriales);
+	size_t opcion = allDataMenu(PATH_EDITORIAL, sizeof(Editorial), POS_Y_AFTER_HEADER, printEditoriales);
 	if(opcion == 0){
 		opcion = altaEditorial();
 	}
@@ -425,7 +425,7 @@ void modificarEditorial(){
 	Editorial *editorialPtr;
 	FILE* fEditorial = fopen(PATH_EDITORIAL, "r+b");
 
-	size_t opcion = dataMenu(PATH_EDITORIAL, sizeof(Editorial), POS_Y_AFTER_HEADER, printEditoriales);
+	size_t opcion = allDataMenu(PATH_EDITORIAL, sizeof(Editorial), POS_Y_AFTER_HEADER, printEditoriales);
 	editorialPtr = getDato(&opcion, PATH_EDITORIAL, sizeof(Editorial), compareEditorialID);
 
 	if(opcion == 0){
@@ -520,7 +520,7 @@ void printAutores(const void *data, int y, int opcion, int cantDatos){
  * @return El ID del autor asignado al libro.
  */
 size_t asignarAutor(){
-	size_t opcion = dataMenu(PATH_AUTOR, sizeof(Autor), POS_Y_AFTER_HEADER, printAutores);
+	size_t opcion = allDataMenu(PATH_AUTOR, sizeof(Autor), POS_Y_AFTER_HEADER, printAutores);
 	if(opcion == 0){
 		opcion = altaAutor();
 	}
@@ -532,7 +532,7 @@ void modificarAutor(){
 	Autor *autorPtr;
 	FILE* fAutor = fopen(PATH_AUTOR, "r+b");
 
-	size_t opcion = dataMenu(PATH_AUTOR, sizeof(Autor), POS_Y_AFTER_HEADER, printAutores);
+	size_t opcion = allDataMenu(PATH_AUTOR, sizeof(Autor), POS_Y_AFTER_HEADER, printAutores);
 	autorPtr = getDato(&opcion, PATH_AUTOR, sizeof(Autor), compareAutorID);
 
 	if(opcion == 0){

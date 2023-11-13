@@ -94,7 +94,7 @@ void menuLibros() {
 }
 
 void menuPrestamos() {
-	OpcionesMenu om[] = {"          PRESTAMOS", "NUEVO", "REVOCAR", "LISTAR ", "CONSULTAR", "VOLVER AL MENU PRINCIPAL"};
+	OpcionesMenu om[] = {"          PRESTAMOS", "NUEVO", "REVOCAR", "LISTAR ", "VOLVER AL MENU PRINCIPAL"};
 	int opcionSeleccionada;
 	int cantOpciones = SIZEOFARRAY(om);
 	Coordenada xy = {POS_MENU_X, POS_MENU_Y};
@@ -106,6 +106,7 @@ void menuPrestamos() {
 				altaPrestamo();
 				break;
 			case 2:
+				revocarPrestamo();
 				break;
 			case 3:
 				listAllPrestamos();
@@ -487,23 +488,20 @@ void clearScreenFrom(int y){
  * con datos almacenados en un archivo.
  *
  * @param data Un puntero a los datos que se mostrarán en el menú.
- * @param path La ruta del archivo que contiene los datos.
+ * @param cantDatos La ruta del archivo que contiene los datos.
  * @param dataSize El tamaño en bytes de cada dato en el archivo.
  * @param y La posición vertical en la que se iniciará la visualización del menú en la pantalla.
  * @param printFunction La función que se utilizará para imprimir los datos en la pantalla.
  *
  * @return El índice de la opción seleccionada por el usuario (comienza en 1), pudiendo ser -1 si se presionó ESC.
  */
-int dataMenu(const string path, size_t dataSize, int y, void (*printFunction)(const void *, int, int, int)) {
+int dataMenu(const void *data, int cantDatos, int y, void (*printFunction)(const void *, int, int, int)) {
 	int opcion = -1;
 	int key;
-	int cantDatos = getCantDatos(path, dataSize); // Obtiene la cantidad de datos en el archivo.
-	void *datos = malloc(cantDatos * dataSize); // Reserva memoria para almacenar todos los datos.
-	getDatos(datos, path, dataSize); // Obtiene los datos del archivo y los almacena en 'datos'.
 
 	clearScreenFrom(y);
 	_setcursortype(_NOCURSOR); // Oculta el cursor.
-	printFunction(datos, y, opcion, cantDatos);
+	printFunction(data, y, opcion, cantDatos);
 
 	do {
 		key = getKey(); // Obtiene la tecla presionada por el usuario.
@@ -526,13 +524,31 @@ int dataMenu(const string path, size_t dataSize, int y, void (*printFunction)(co
 				opcion = -1;
 				break;
 		}
-		printFunction(datos, y, opcion, cantDatos);
+		printFunction(data, y, opcion, cantDatos);
 	} while (key != ENTER && key != ESC); // Continúa el bucle hasta que se presione ENTER o ESC.
 	_setcursortype(_SOLIDCURSOR); // Restablece el cursor a su estado sólido.
 	clearScreenFrom(y);
 	return opcion + 1; // Retorna el índice de la opción seleccionada por el usuario.
 }
 
+/** @brief Esta función muestra un menú interactivo que presenta todos los datos almacenados en un archivo y permite al usuario
+ * seleccionar una opción. Los datos se imprimen en la pantalla usando la función 'printFunction', y el usuario puede
+ * navegar por las opciones con las teclas de flecha (arriba, abajo, izquierda, derecha). Se utiliza para interactuar
+ * con datos almacenados en un archivo.
+ *
+ * @param path La ruta del archivo que contiene los datos.
+ * @param dataSize El tamaño en bytes de cada dato en el archivo.
+ * @param y La posición vertical en la que se iniciará la visualización del menú en la pantalla.
+ * @param printFunction La función que se utilizará para imprimir los datos en la pantalla.
+ *
+ * @return El índice de la opción seleccionada por el usuario (comienza en 1), pudiendo ser -1 si se presionó ESC.
+ */
+int allDataMenu(const string path, size_t dataSize, int y, void (*printFunction)(const void *, int, int, int)) {
+	int cantDatos = getCantDatos(path, dataSize); // Obtiene la cantidad de datos en el archivo.
+	void *datos = malloc(cantDatos * dataSize); // Reserva memoria para almacenar todos los datos.
+	getDatos(datos, path, dataSize); // Obtiene los datos del archivo y los almacena en 'datos'.
+	return dataMenu(datos, cantDatos, y, printFunction);
+}
 
 /**@brief Esta función comprueba si la cadena de caracteres proporcionada cumple con los requisitos básicos de una
  * dirección de correo electrónico válida. Los requisitos incluyen la presencia de un solo carácter '@',
